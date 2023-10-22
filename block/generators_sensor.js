@@ -2,7 +2,7 @@ module.exports = function(Blockly){
   'use strict';
 
 Blockly.JavaScript['button_1_status'] = function(block) {  
-  var code = '(digitalRead(15))';  
+  var code = '(digitalRead(13))';  
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -117,7 +117,7 @@ Blockly.JavaScript['IMU_status'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 Blockly.JavaScript['Voltage_status'] = function(block) {  
-  var code = 'voltage_sensor();\n';
+  var code = 'Volt_input();\n';
   return code;
 };
 

@@ -167,8 +167,9 @@ int Read_angle(int angle_){
 }
 void buzzer(int freq, int timr_delay) {
   pinMode(12, OUTPUT);
-  ledcAttachPin(12,1);
-  ledcWriteTone(1, freq);
+  ledcSetup(7, 5000, 8);
+  ledcAttachPin(12,7);
+  ledcWriteTone(7, freq);
   delay(timr_delay);
   
 }
@@ -178,13 +179,19 @@ void beep(){
   buzzer(1000,200);
   buzzer(0,200);
 }
+void beep_on(){
+  buzzer(1000,200);
+}
+void beep_off(){
+  buzzer(0,200);
+}
 void beep(int _delay){
   buzzer(1000,_delay);
   buzzer(0,1);
 }
 
 float Volt_input(){
-  return (((float)ADC(3)*3.30)/1023.00)*5.9;
+  return (((float)ADC(9)));
 }
 
 void wait(){
@@ -242,7 +249,7 @@ void wait(){
       display.drawString(0,48,String(String("A17::")));
       display.drawString(28,48,String(analog(17)));
       display.drawString(65,48,String(String("Volt=")));
-      display.drawString(95,48,String(Volt_input()));
+      display.drawString(95,48,String(Volt_input()*(3.3/4095.0)*5.05));
       display.display();
       delay(100);
     }

@@ -572,6 +572,36 @@ module.exports = {
                         </value>
                     </block>`
                 },
+                { 
+                    xml : 
+                    `<block type="NKP_motor_forward2_4WD">
+                        <value name="speed1">
+                            <shadow type="math_number">
+                                <field name="NUM">50</field>
+                            </shadow>
+                        </value>
+                        <value name="speed2">
+                            <shadow type="math_number">
+                                <field name="NUM">50</field>
+                            </shadow>
+                        </value>
+                    </block>`
+                },
+                { 
+                    xml : 
+                    `<block type="NKP_motor_backward2_4WD">
+                        <value name="speed1">
+                            <shadow type="math_number">
+                                <field name="NUM">50</field>
+                            </shadow>
+                        </value>
+                        <value name="speed2">
+                            <shadow type="math_number">
+                                <field name="NUM">50</field>
+                            </shadow>
+                        </value>
+                    </block>`
+                },
                 
 
         

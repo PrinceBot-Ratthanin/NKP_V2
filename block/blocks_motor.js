@@ -154,7 +154,45 @@ Blockly.Blocks['NKP_motor_forward2'] = {
   init: function() {
     this.appendValueInput("speed1")
       .setCheck("Number")
-      .appendField("Move Forward left wheel at speed");
+      .appendField("Move Forward 🏍 left wheel at speed");
+    this.appendDummyInput()
+      .appendField("%");
+      this.appendValueInput("speed2")
+      .setCheck("Number")
+      .appendField("right wheel at speed");
+    this.appendDummyInput()
+      .appendField("%");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(180);
+    this.setTooltip("");
+  }
+};
+Blockly.Blocks['NKP_motor_forward2_4WD'] = {
+  init: function() {
+    this.appendValueInput("speed1")
+      .setCheck("Number")
+      .appendField("Move Forward (4WD) 🏎 Left Motors at speed");
+    this.appendDummyInput()
+      .appendField("%");
+      this.appendValueInput("speed2")
+      .setCheck("Number")
+      .appendField("Right motors at speed");
+    this.appendDummyInput()
+      .appendField("%");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(180);
+    this.setTooltip("");
+  }
+};
+Blockly.Blocks['NKP_motor_backward2'] = {
+  init: function() {
+    this.appendValueInput("speed1")
+      .setCheck("Number")
+      .appendField("Move Backward 🏍 left wheel at speed");
     this.appendDummyInput()
       .appendField("%");
       this.appendValueInput("speed2")
@@ -169,16 +207,16 @@ Blockly.Blocks['NKP_motor_forward2'] = {
     this.setTooltip("");
   }
 };
-Blockly.Blocks['NKP_motor_backward2'] = {
+Blockly.Blocks['NKP_motor_backward2_4WD'] = {
   init: function() {
     this.appendValueInput("speed1")
       .setCheck("Number")
-      .appendField("Move Backward left wheel at speed");
+      .appendField("Move Backward (4WD) 🏎 Left Motors at speed");
     this.appendDummyInput()
       .appendField("%");
       this.appendValueInput("speed2")
       .setCheck("Number")
-      .appendField("and right wheel at speed");
+      .appendField("Right motors at speed");
     this.appendDummyInput()
       .appendField("%");
     this.setInputsInline(true);

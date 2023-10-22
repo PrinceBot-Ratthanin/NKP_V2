@@ -136,6 +136,14 @@ Blockly.JavaScript['NKP_motor_forward2'] = function(block) {
   code += 'motor_control(2,'+value_speed2+');';
   return code;
 };
+Blockly.JavaScript['NKP_motor_forward2_4WD'] = function(block) {
+  var value_speed1 = Blockly.JavaScript.valueToCode(block, 'speed1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_speed2 = Blockly.JavaScript.valueToCode(block, 'speed2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var code = '';
+  code += 'motor_control(15,'+value_speed1+');';
+  code += 'motor_control(17,'+value_speed2+');';
+  return code;
+};
 
 Blockly.JavaScript['NKP_motor_backward2'] = function(block) {
   var value_speed1 = Blockly.JavaScript.valueToCode(block, 'speed1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
@@ -143,6 +151,14 @@ Blockly.JavaScript['NKP_motor_backward2'] = function(block) {
   var code = '';
   code += 'motor_control(1,'+value_speed1+');';
   code += 'motor_control(3,'+value_speed2+');';
+  return code;
+};
+Blockly.JavaScript['NKP_motor_backward2_4WD'] = function(block) {
+  var value_speed1 = Blockly.JavaScript.valueToCode(block, 'speed1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_speed2 = Blockly.JavaScript.valueToCode(block, 'speed2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var code = '';
+  code += 'motor_control(16,'+value_speed1+');';
+  code += 'motor_control(18,'+value_speed2+');';
   return code;
 };
 
