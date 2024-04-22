@@ -52,7 +52,7 @@ uint32_t _lastPosition;
 bool first_state_for_calribrate = 0;
 
 int PID_NumPin_B = 3;
-int Black_color = 0;
+int Back_color = 0;
 int Black_sensitive = 20;
 int PID_SetupPin_B[] = {0,0,0,0,0,0,0,0};
 int PID_Min_B[] = {10,10,10,10,10,10,10,10};
@@ -386,6 +386,24 @@ void Run_PID(int RUN_PID_speed,float RUN_PID_KP,float RUN_PID_KD){
   delay(1);
   previous_error = errors;
 }
+void Run_PID_4WD(int RUN_PID_speed,float RUN_PID_KP,float RUN_PID_KD){
+  
+  int present_position = readline();
+  int setpoint = ((PID_NumPin - 1) * 100) / 2;
+  errors = present_position - setpoint;
+  integral = integral + errors ;
+  derivative = (errors - previous_error) ;
+  output = RUN_PID_KP * errors  + RUN_PID_KD * derivative;
+    
+  int m1Speed = RUN_PID_speed + output ;
+  int m2Speed = RUN_PID_speed - output;
+  motor(1,m1Speed);
+  motor(2,m2Speed);
+  motor(3,m1Speed);
+  motor(4,m2Speed);
+  delay(1);
+  previous_error = errors;
+}
 
 void PID_set_Min_B(int S0,int S1,int S2,int S3,int S4,int S5,int S6,int S7){
   PID_Min_B[0] = S0;PID_Min_B[1] = S1;PID_Min_B[2] = S2;PID_Min_B[3] = S3;
@@ -407,7 +425,7 @@ int readline_B()
   for (uint8_t i = 0; i < PID_NumPin_B ; i++) 
   {
   	long value_B;
-  	if(Black_color == 0){
+  	if(Back_color == 0){
   		value_B = map(analog(PID_SetupPin_B[i]), PID_Min_B[i], PID_Max_B[i], 100, 0);
   	}
     else {
@@ -447,6 +465,24 @@ void Run_PID_B(int RUN_PID_speed,float RUN_PID_KP,float RUN_PID_KD){
 
   motor(1,-m1Speed);
   motor(2,-m2Speed);
+  delay(1);
+  previous_error_B = errors_B;
+}
+void Run_PID_B_4WD(int RUN_PID_speed,float RUN_PID_KP,float RUN_PID_KD){
+  int present_position_B = readline_B();
+  int setpoint_B = ((PID_NumPin_B - 1) * 100) / 2;
+  errors_B = present_position_B - setpoint_B;
+  integral_B = integral_B + errors_B ;
+  derivative_B = (errors_B - previous_error_B) ;
+  output_B = RUN_PID_KP * errors_B  + RUN_PID_KD * derivative_B;
+  
+  int m1Speed = RUN_PID_speed - output_B ;
+  int m2Speed = RUN_PID_speed + output_B;
+
+  motor(1,-m1Speed);
+  motor(2,-m2Speed);
+  motor(3,-m1Speed);
+  motor(4,-m2Speed);
   delay(1);
   previous_error_B = errors_B;
 }
@@ -501,4 +537,30 @@ void setCalibrate_B(int round){
   }
   display.clear();
     
+}
+int Read_sumValue_sensor(){
+  int value = 0;
+  for(int i = 0;i<PID_NumPin;i++){
+    if(Front_color == 0){
+        value += map(analog(PID_SetupPin[i]), PID_Min[i], PID_Max[i], 100, 0);
+      }
+      else {
+        value += map(analog(PID_SetupPin[i]), PID_Min[i], PID_Max[i], 0, 100);
+      } 
+  }
+   
+    return value;
+}
+int Read_sumValue_sensor_B(){
+  int value = 0;
+  for(int i = 0;i<PID_NumPin_B;i++){
+    if(Back_color == 0){
+        value += map(analog(PID_SetupPin_B[i]), PID_Min_B[i], PID_Max_B[i], 100, 0);
+      }
+      else {
+        value += map(analog(PID_SetupPin_B[i]), PID_Min_B[i], PID_Max_B[i], 0, 100);
+      } 
+  }
+   
+    return value;
 }

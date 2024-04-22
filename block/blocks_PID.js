@@ -191,6 +191,10 @@ Blockly.Blocks['NKP_ONE_PID_setMax'] = {
 };
 Blockly.Blocks['NKP_ONE_Run_PID'] = {
   init: function() {
+  	this.appendDummyInput()
+      .appendField("")
+      .appendField(new Blockly.FieldDropdown([["2WD", "0"],["4WD", "1"]]), "Transmission");
+    
     this.appendValueInput("speed")
       .setCheck("Number")
       .appendField("Front_Run_PD_Speed:");
@@ -251,7 +255,22 @@ Blockly.Blocks['Read_Ref_Front_Sensor'] = {
   }
 };
 
+Blockly.Blocks['Front_readSum'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Front_readSum");
+    this.setInputsInline(true);
+    this.setOutput(true);
+    this.setColour(330);
+ this.setTooltip("Front_readSum");
+ this.setHelpUrl("");
+  }
+};
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Blockly.Blocks['Run_following_of_line_B'] = {
   init: function() {
@@ -438,6 +457,9 @@ Blockly.Blocks['PID_setSensitive_B'] = {
 };
 Blockly.Blocks['NKP_ONE_Run_PID_B'] = {
   init: function() {
+  	this.appendDummyInput()
+      .appendField("")
+      .appendField(new Blockly.FieldDropdown([["2WD", "0"],["4WD", "1"]]), "Transmission");
     this.appendValueInput("speed")
       .setCheck("Number")
       .appendField("Back_Run_PD_Speed:");
@@ -468,6 +490,18 @@ Blockly.Blocks['Read_Status_Black_Sensor'] = {
     this.setOutput(true);
     this.setColour(280);
     this.setTooltip("");
+  }
+};
+
+Blockly.Blocks['Back_readSum'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Back_readSum");
+    this.setInputsInline(true);
+    this.setOutput(true);
+    this.setColour(280);
+ this.setTooltip("Back_readSum");
+ this.setHelpUrl("");
   }
 };
 

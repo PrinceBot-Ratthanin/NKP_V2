@@ -766,6 +766,8 @@ module.exports = {
               },
               'Read_Status_Front_Sensor',
               "Read_Ref_Front_Sensor",
+              "Front_readSum",
+
 	          {xml:`<block type="NKP_ONE_PID_setPin_B"></block>`},
               'NKP_ONE_PID_setline_color_Black',
 	          
@@ -892,6 +894,7 @@ module.exports = {
 	                        </value>
 	                    </block>`
 	          },
+              "Back_readSum",
               
               
 

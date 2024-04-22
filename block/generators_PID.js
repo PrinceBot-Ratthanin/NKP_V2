@@ -88,11 +88,19 @@ Blockly.JavaScript['PID_setSensitive'] = function(block) {
 };
 
 Blockly.JavaScript['NKP_ONE_Run_PID'] = function(block) {
+  var value_tranmission = block.getFieldValue('Transmission');
   var value_speed = Blockly.JavaScript.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_KP = Blockly.JavaScript.valueToCode(block, 'KP', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_KD = Blockly.JavaScript.valueToCode(block, 'KD', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var code = '';
-  code += 'Run_PID('+ value_speed+','+value_KP+','+value_KD+');\n';
+
+  if(value_tranmission == '0'){
+    code += 'Run_PID('+ value_speed+','+value_KP+','+value_KD+');\n';
+  }
+  else{
+    code += 'Run_PID_4WD('+ value_speed+','+value_KP+','+value_KD+');\n';
+  }
+  //code += 'Run_PID('+ value_speed+','+value_KP+','+value_KD+');\n';
   return code;
 };
 Blockly.JavaScript['set_calibrate_Front_sensor'] = function(block) {
@@ -124,6 +132,13 @@ Blockly.JavaScript['Read_Status_Front_Sensor'] = function(block) {
   }
   
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['Front_readSum'] = function(block) {
+    //var value_pin = block.getFieldValue('pin');
+    //var code = `readline(${value_pin})`;  
+    var code = `Read_sumValue_sensor()`;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 
@@ -213,13 +228,33 @@ Blockly.JavaScript['PID_setSensitive_B'] = function(block) {
 };
 
 Blockly.JavaScript['NKP_ONE_Run_PID_B'] = function(block) {
+  var value_tranmission = block.getFieldValue('Transmission');
   var value_speed = Blockly.JavaScript.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_KP = Blockly.JavaScript.valueToCode(block, 'KP', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_KD = Blockly.JavaScript.valueToCode(block, 'KD', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var code = '';
-  code += 'Run_PID_B('+ value_speed+','+value_KP+','+value_KD+');\n';
+
+  if(value_tranmission == '0'){
+    code += 'Run_PID_B('+ value_speed+','+value_KP+','+value_KD+');\n';
+  }
+  else{
+    code += 'Run_PID_B_4WD('+ value_speed+','+value_KP+','+value_KD+');\n';
+  }
+
+  //code += 'Run_PID_B('+ value_speed+','+value_KP+','+value_KD+');\n';
   return code;
 };
+
+
+Blockly.JavaScript['Back_readSum'] = function(block) {
+    //var value_pin = block.getFieldValue('pin');
+    //var code = `readline(${value_pin})`;  
+    var code = `Read_sumValue_sensor_B()`;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+
+
 
 Blockly.JavaScript['EditTextCode'] = function(block) {
   //var value_text = Blockly.JavaScript.valueToCode(block, 'Text', Blockly.JavaScript.ORDER_ATOMIC);
