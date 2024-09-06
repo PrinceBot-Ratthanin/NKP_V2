@@ -4,6 +4,12 @@
 
 module.exports = function(Blockly) {
 
+Blockly.JavaScript['NKP_control_voltage'] = function(block) {
+  var value_volt = Blockly.JavaScript.valueToCode(block, 'volt', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = 'control_voltage = (' + value_volt + ');\n';
+  return code;
+};
+
 Blockly.JavaScript['NKP_motor'] = function(block) {
   var dropdown_ch = block.getFieldValue('ch');
   var dropdown_dir = block.getFieldValue('dir');

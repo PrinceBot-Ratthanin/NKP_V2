@@ -4,6 +4,22 @@
 module.exports = function(Blockly){
   'use strict';
 
+Blockly.Blocks['NKP_control_voltage'] = {
+  init: function() {
+    this.appendValueInput("volt")
+      .setCheck("Number")
+      .appendField("Set voltage for speed motor");
+    this.appendDummyInput()
+      .appendField("V  (5V++)");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(180);
+    this.setTooltip("");
+  }
+};
+
+
 Blockly.Blocks['NKP_V2motor2WD'] = {
   init: function() {
     this.appendDummyInput()

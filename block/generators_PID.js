@@ -180,7 +180,7 @@ Blockly.JavaScript['NKP_ONE_PID_setline_color_Black'] = function(block) {
   var value_line_color = block.getFieldValue('line_color');
   
   var code = '';
-  code += 'Black_color = ' + value_line_color+';';
+  code += 'Back_color = ' + value_line_color+';';
   return code;
 };
 Blockly.JavaScript['PID_readLine_B'] = function(block) {
