@@ -81,7 +81,7 @@ void clear_pixel(int16_t x, int16_t y)
 }
 void NKP_V2(){
   analogReadResolution(12);
-  //Wire.begin();
+  
   Serial.begin(115200);
   pinMode(13,INPUT);
   display.init();
@@ -91,6 +91,11 @@ void NKP_V2(){
      Serial.println("Found sensor");
   }
   motor_control(14,0);
+  if(ADC(0) == 0 and ADC(1) == 0 and ADC(2) == 0 and ADC(4) == 0 and ADC(5) == 0 and ADC(6) == 0 and ADC(7) == 0){
+    select_conection_i2c = 1;
+    Wire1.begin(16,17);
+  }
+  delay(200);
 }
 
 
@@ -107,13 +112,13 @@ int analog(int _pin){
     else if(_pin == 13){return analogRead(33);}
     else if(_pin == 14){return analogRead(27);}
 
-    else if(_pin == 8){return ADC(0);}
-    else if(_pin == 9){return ADC(2);}
-    else if(_pin == 10){return ADC(5);}
-    else if(_pin == 11){return ADC(6);}
-    else if(_pin == 15){return ADC(1);}
-    else if(_pin == 16){return ADC(4);}
-    else if(_pin == 17){return ADC(7);}
+    else if(_pin == 8){return ADC(0)*4.00;}
+    else if(_pin == 9){return ADC(2)*4.00;}
+    else if(_pin == 10){return ADC(5)*4.00;}
+    else if(_pin == 11){return ADC(6)*4.00;}
+    else if(_pin == 15){return ADC(1)*4.00;}
+    else if(_pin == 16){return ADC(4)*4.00;}
+    else if(_pin == 17){return ADC(7)*4.00;}
   
 }
 
@@ -190,9 +195,7 @@ void beep(int _delay){
   buzzer(0,1);
 }
 
-float Volt_input(){
-  return (((float)ADC(9)));
-}
+
 
 void wait(){
   int state_sw0 = 0;
@@ -249,7 +252,7 @@ void wait(){
       display.drawString(0,48,String(String("A17::")));
       display.drawString(28,48,String(analog(17)));
       display.drawString(65,48,String(String("Volt=")));
-      display.drawString(95,48,String(Volt_input()*(3.3/4095.0)*5.05));
+      display.drawString(95,48,String(Volt_input()));
       display.display();
       delay(100);
     }
@@ -460,8 +463,8 @@ void Run_PID_B(int RUN_PID_speed,float RUN_PID_KP,float RUN_PID_KD){
   derivative_B = (errors_B - previous_error_B) ;
   output_B = RUN_PID_KP * errors_B  + RUN_PID_KD * derivative_B;
   
-  int m1Speed = RUN_PID_speed - output_B ;
-  int m2Speed = RUN_PID_speed + output_B;
+  int m1Speed = RUN_PID_speed + output_B ;
+  int m2Speed = RUN_PID_speed - output_B;
 
   motor(1,-m1Speed);
   motor(2,-m2Speed);
@@ -476,8 +479,8 @@ void Run_PID_B_4WD(int RUN_PID_speed,float RUN_PID_KP,float RUN_PID_KD){
   derivative_B = (errors_B - previous_error_B) ;
   output_B = RUN_PID_KP * errors_B  + RUN_PID_KD * derivative_B;
   
-  int m1Speed = RUN_PID_speed - output_B ;
-  int m2Speed = RUN_PID_speed + output_B;
+  int m1Speed = RUN_PID_speed + output_B ;
+  int m2Speed = RUN_PID_speed - output_B;
 
   motor(1,-m1Speed);
   motor(2,-m2Speed);
