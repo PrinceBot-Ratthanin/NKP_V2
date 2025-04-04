@@ -74,6 +74,18 @@ Blockly.JavaScript['NKP_servo2'] = function(block) {
   var code = 'servo2(' + dropdown_ch + ', ' + dropdown_dir +', ' + value_speed + ');\n';
   return code;
 };
+
+Blockly.JavaScript['NKP_servo_speed_control'] = function(block) {
+  var dropdown_ch = block.getFieldValue('ch');
+  var dropdown_speed = block.getFieldValue('speed');
+  var value_servo_degree = Blockly.JavaScript.valueToCode(block, 'servo_degree', Blockly.JavaScript.ORDER_ATOMIC) || 0;
+  var value_traget_degree = Blockly.JavaScript.valueToCode(block, 'traget_degree', Blockly.JavaScript.ORDER_ATOMIC) || 0;
+  
+  var code = 'control_servo(' + dropdown_ch + ', ' + value_servo_degree + ', ' + value_traget_degree + ', ' + dropdown_speed + ');\n';
+  return code;
+};
+
+
 Blockly.JavaScript['NKP_motor_forward'] = function(block) {
   var value_speed = Blockly.JavaScript.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var code = '';

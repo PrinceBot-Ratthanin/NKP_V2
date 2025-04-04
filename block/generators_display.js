@@ -55,7 +55,7 @@ Blockly.JavaScript['i2c128x64_display_image'] = function(block) {
 };
 
 Blockly.JavaScript['i2c128x64_display_clear'] = function(block) {  
-  var code = 'display.clear();\n';
+  var code = 'display.clearDisplay();\n';
   return code;
 };
 
@@ -69,11 +69,11 @@ Blockly.JavaScript['i2c128x64_display_print'] = function(block) {
   var value_x = Blockly.JavaScript.valueToCode(block, 'x', Blockly.JavaScript.ORDER_ATOMIC);
   var value_y = Blockly.JavaScript.valueToCode(block, 'y', Blockly.JavaScript.ORDER_ATOMIC);
   var dropdown_font = block.getFieldValue('font');  
-  var code = 
-`
-display.setFont(${dropdown_font});
-display.drawString(${value_x},${value_y},String(${value_text}));
-`;
+  var code = '';
+  if(dropdown_font == 'ArialMT_Plain_10'){code +='display.setTextSize(1);\n';}
+  if(dropdown_font == 'ArialMT_Plain_16'){code +='display.setTextSize(2);\n';}
+  if(dropdown_font == 'ArialMT_Plain_24'){code +='display.setTextSize(3);\n';}
+  code +=`drawString(${value_x},${value_y},${value_text});`;
   return code;
 };
 
@@ -82,11 +82,11 @@ Blockly.JavaScript['i2c128x64_display_print_number'] = function(block) {
   var value_x = Blockly.JavaScript.valueToCode(block, 'x', Blockly.JavaScript.ORDER_ATOMIC);
   var value_y = Blockly.JavaScript.valueToCode(block, 'y', Blockly.JavaScript.ORDER_ATOMIC);
   var dropdown_font = block.getFieldValue('font');  
-  var code = 
-`
-display.setFont(${dropdown_font});
-display.drawString(${value_x},${value_y},String(${value_text}));
-`;
+  var code = '';
+if(dropdown_font == 'ArialMT_Plain_10'){code +='display.setTextSize(1);\n';}
+  if(dropdown_font == 'ArialMT_Plain_16'){code +='display.setTextSize(2);\n';}
+  if(dropdown_font == 'ArialMT_Plain_24'){code +='display.setTextSize(3);\n';}
+  code +=`drawString(${value_x},${value_y},String(${value_text}));`;
   return code;
 };
 

@@ -107,7 +107,7 @@ Blockly.Blocks['NKP_servo'] = {
   init: function() {
     this.appendDummyInput()
       .appendField("set servo")
-      .appendField(new Blockly.FieldDropdown([["1","1"], ["2","2"], ["3","3"], ["4","4"], ["5","5"]]), "ch");
+      .appendField(new Blockly.FieldDropdown([["0","0"],["1","1"], ["2","2"], ["3","3"], ["4","4"], ["5","5"]]), "ch");
     this.appendValueInput("angle")
       .setCheck("Number")
       .appendField("degree");
@@ -131,6 +131,36 @@ Blockly.Blocks['NKP_servo2'] = {
       .appendField("speed");
     this.appendDummyInput()
       .appendField("%");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+  }
+};
+Blockly.Blocks['NKP_servo_speed_control'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("set servo")
+      .appendField(new Blockly.FieldDropdown([["0","0"],["1","1"], ["2","2"], ["3","3"], ["4","4"],["5","5"],]), "ch");
+    this.appendValueInput("servo_degree")
+      .setCheck("Number")
+      .appendField("Degree:");
+    this.appendValueInput("traget_degree")
+      .setCheck("Number")
+      .appendField("To");
+    this.appendDummyInput()
+      .appendField("speed:")
+      .appendField(new Blockly.FieldDropdown([["1","15"],
+                                              ["2","14"],
+                                              ["3","13"],
+                                              ["4","12"],
+                                              ["5","11"],
+                                              ["6","10"],
+                                              ["7","9"],
+                                              ["8","8"],
+                                              ["9","7"],
+                                              ["10","6"]]), "speed");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

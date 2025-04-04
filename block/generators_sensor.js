@@ -7,7 +7,7 @@ Blockly.JavaScript['button_1_status'] = function(block) {
 };
 
 Blockly.JavaScript['Knob_status'] = function(block) {  
-  var code = '(_Knob())';
+  var code = '(analogRead(33))';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 Blockly.JavaScript['encoderA_status'] = function(block) {  
@@ -33,6 +33,11 @@ Blockly.JavaScript['Read_position_TCSensor'] = function(block) {
 Blockly.JavaScript['TCSensor_status'] = function(block) {
   var dropdown_pin = block.getFieldValue('pin');
   var code = `(analog(${dropdown_pin}))`;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+Blockly.JavaScript['Digital_IN_status'] = function(block) {
+  var dropdown_pin = block.getFieldValue('pin');
+  var code = `((IN(${dropdown_pin}))`;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 Blockly.JavaScript['Ultrasonic_Sensor'] = function(block) {
@@ -137,4 +142,122 @@ Blockly.JavaScript['Compass_Read'] = function(block) {
   var code = `compass.getAzimuth() `;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
+
+
+
+
+
+Blockly.JavaScript['IMU_begin'] = function(block) {  
+
+  var code = '#SETUP   display.setTextSize(1); drawString(0, 0, "Wait IMU"); display.display(); initIMU();updateIMU_fine_offset_Yaw(200); #END\n';
+  return code;
+};
+Blockly.JavaScript['IMU_update'] = function(block) {  
+  var code = 'mpu6050.update();\n';
+  return code;
+};
+Blockly.JavaScript['IMU_getData_Yaw'] = function(block) {
+  var dropdown_axis = block.getFieldValue('axis');
+
+  var code = ``;
+  if(dropdown_axis == '0'){code += `getYaw()`}
+    if(dropdown_axis == '1'){code += `getContinuousYaw()`}
+      if(dropdown_axis == '2'){code += `getOffsetYaw()`}
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+Blockly.JavaScript['IMU_getData'] = function(block) {
+  var dropdown_axis = block.getFieldValue('axis');
+
+  var code = ``;
+  if(dropdown_axis == '0'){code += `getPitch()`}
+    if(dropdown_axis == '1'){code += `getRoll()`}
+      if(dropdown_axis == '2'){code += `getYaw()`}
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+Blockly.JavaScript['IMU_TurnPID'] = function(block) {
+  var value_s0 = Blockly.JavaScript.valueToCode(block, 'S0', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var code = '';
+  //code += 'PID_NumPin = ' + value_numSensor+';\t';
+  code += 'turnPID('+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s4+');\n';
+  return code;
+};
+
+
+Blockly.JavaScript['IMU_set_dataFor_turnDirection'] = function(block) {
+  var value_s0 = Blockly.JavaScript.valueToCode(block, 'S0', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var code = '';
+  //code += 'PID_NumPin = ' + value_numSensor+';\t';
+  code += 'set_data_for_turnDirection('+value_s4+','+value_s0+','+value_s1+','+value_s2+','+value_s3+');\n';
+  return code;
+};
+
+Blockly.JavaScript['IMU_TurnByDirection'] = function(block) {
+  var dropdown_direction = block.getFieldValue('direction');
+
+  var code = ``;
+  if(dropdown_direction == '0'){code += `turn_180();`}
+  if(dropdown_direction == '1'){code += `turn_270();`}
+  if(dropdown_direction == '2'){code += `turn_360();`}
+  if(dropdown_direction == '3'){code += `turn_90();`}
+  if(dropdown_direction == '4'){code += `turn_45();`}
+  if(dropdown_direction == '5'){code += `turn_135();`}
+  if(dropdown_direction == '6'){code += `turn_225();`}
+  if(dropdown_direction == '7'){code += `turn_315();`}
+
+  return code;
+};
+
+Blockly.JavaScript['IMU_TurnByAngle'] = function(block) {
+  var dropdown_angle = block.getFieldValue('angle');
+
+  var code = ``;
+  if(dropdown_angle == '0'){code += `turnByAngle(90);`}
+  if(dropdown_angle == '1'){code += `turnByAngle(-90);`}
+  if(dropdown_angle == '2'){code += `turnByAngle(180);`}
+  if(dropdown_angle == '3'){code += `turnByAngle(-180);`}
+  if(dropdown_angle == '4'){code += `turnByAngle(45);`}
+  if(dropdown_angle == '5'){code += `turnByAngle(-45);`}
+  return code;
+};
+
+Blockly.JavaScript['IMU_moveStraightPID'] = function(block) {
+  var dropdown_dir = block.getFieldValue('dir');
+  var value_s0 = Blockly.JavaScript.valueToCode(block, 'S0', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var checkbox_newline = (block.getFieldValue('Slow') == 'TRUE')? '1' : '0';
+
+  var code = '';
+  //code += 'PID_NumPin = ' + value_numSensor+';\t';
+  code += 'moveStraightPID('+dropdown_dir+','+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+','+checkbox_newline+');\n';
+  return code;
+};
+Blockly.JavaScript['IMU_moveStraightDirection'] = function(block) {
+  var dropdown_direction = block.getFieldValue('dir');
+  var dropdown_angle = block.getFieldValue('angle');
+  
+  var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var checkbox_newline = (block.getFieldValue('Slow') == 'TRUE')? '1' : '0';
+
+  var code = ``;
+  code += 'MoveStraightDirection('+dropdown_direction+','+dropdown_angle+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+','+checkbox_newline+');\n';
+  return code;
+};
+
+
 }

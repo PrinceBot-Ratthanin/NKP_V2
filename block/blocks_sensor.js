@@ -28,7 +28,7 @@ module.exports = function(Blockly){
   Blockly.Blocks['sw1_press'] = {
     init: function() {
       this.appendDummyInput()
-          .appendField("Wait SW1 press");
+          .appendField("Wait Switch OK press");
       this.setInputsInline(true);
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
@@ -127,19 +127,6 @@ module.exports = function(Blockly){
    this.setHelpUrl("");
     }
   };
-  /*Blockly.Blocks['TCSensor_status'] = {
-    init: function() {
-      this.appendDummyInput()
-        .appendField("TCSensor pin")
-        .appendField(new Blockly.FieldDropdown([["A0","A0"],["A1","A1"], ["A2","A2"], ["A3","A3"], ["A4","A4"], ["A5","A5"], ["A6","A6"], ["A7","A7"], ["A8","A8"], ["A9","A9"]]), "_pin")
-      this.setInputsInline(true);
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
-      this.setColour(180);
-      this.setTooltip("");
-      this.setHelpUrl("https://github.com/maxpromer/iKB-1_Arduino");
-    }
-  };*/
   Blockly.Blocks['TCSensor_status'] = {
     init: function() {
       this.appendDummyInput()
@@ -155,6 +142,33 @@ module.exports = function(Blockly){
    this.setHelpUrl("");
     }
   };
+  Blockly.Blocks['IN_status'] = {
+    init: function() {
+      this.appendDummyInput()
+          .appendField("Light sensor pin")
+          .appendField(new Blockly.FieldDropdown([["A1","1"], ["A2","2"], ["A3","3"], ["A4","4"]
+                                                , ["A5","5"], ["A6","6"], ["A7","7"], ["A8","8"], ["A9","9"]
+                                                , ["A10","10"], ["A11","11"], ["A12","12"], ["A13","13"], ["A14","14"]
+                                                , ["A15","15"], ["A16","16"], ["A17","17"]]), "pin");
+      this.setInputsInline(true);
+      this.setOutput(true, "Number");
+      this.setColour(90);
+   this.setTooltip("read input pin");
+   this.setHelpUrl("");
+    }
+  };
+  // Blockly.Blocks['IN_status'] = {
+  //   init: function() {
+  //     this.appendDummyInput()
+  //         .appendField("Read Digital INPUT")
+  //         .appendField(new Blockly.FieldDropdown([["A3","1"], ["A4","2"], ["A5","3"], ["26","26"], ["27","27"], ["14","14"], ["13","13"]]), "pin");
+  //     this.setInputsInline(true);
+  //     this.setOutput(true, "Number");
+  //     this.setColour(90);
+  //  this.setTooltip("read input pin");
+  //  this.setHelpUrl("");
+  //   }
+  // };
     Blockly.Blocks['Ultrasonic_Sensor'] = {
     init: function() {
       this.appendDummyInput()
@@ -331,29 +345,199 @@ module.exports = function(Blockly){
     }
   };
 
-  Blockly.Blocks["Compass_getData"] = {
+  Blockly.Blocks['IMU_begin'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField('Compass getData QMC5883L');
-    this.appendStatementInput('HANDLER');
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setColour(165);
-    this.setTooltip('');
-    this.setHelpUrl('');
-    }
-  };
-  Blockly.Blocks['Compass_Read'] = {
+        .appendField("IMU begin and calcGyroOffsets");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(65);
+ this.setTooltip("IMU Init");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['IMU_update'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Read Compass");
-    this.setInputsInline(true);
-    this.setOutput(true, ["int", "Number"]);
-    this.setColour(165);
-   this.setTooltip("");
+        .appendField("Gyro update");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(65);
+ this.setTooltip("IMU update");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['IMU_getData_Yaw'] = {
+    init: function() {
+      this.appendDummyInput()
+          .appendField("getYawData")
+          .appendField(new Blockly.FieldDropdown([["getCurrentYaw","0"],["getContinuousYaw","1"], ["getOffsetYaw","2"]]), "axis");
+      this.setInputsInline(true);
+      this.setOutput(true, "Number");
+      this.setColour(65);
+   this.setTooltip("Get Data from IMU");
    this.setHelpUrl("");
     }
   };
+Blockly.Blocks['IMU_getData'] = {
+    init: function() {
+      this.appendDummyInput()
+          .appendField("getData")
+          .appendField(new Blockly.FieldDropdown([["getPitch","0"],["getRoll","1"], ["getYaw","2"]]), "axis");
+      this.setInputsInline(true);
+      this.setOutput(true, "Number");
+      this.setColour(65);
+   this.setTooltip("Get Data from IMU");
+   this.setHelpUrl("");
+    }
+  };
+Blockly.Blocks['IMU_TurnPID'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("TurnPID to angle=");
+    this.appendValueInput("S0")
+      .setCheck("Number")
+      .appendField("");
+    this.appendValueInput("S1")
+      .setCheck("Number")
+      .appendField("Min speed=");
+    this.appendValueInput("S2")
+      .setCheck("Number")
+      .appendField("Max speed=");
+    this.appendValueInput("S3")
+      .setCheck("Number")
+      .appendField("KP=");
+    this.appendValueInput("S4")
+      .setCheck("Number")
+      .appendField("KD=");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(65);
+    this.setTooltip("");
+  }
+};
+Blockly.Blocks['IMU_TurnByDirection'] = {
+  init: function() {
+    this.appendDummyInput()
+          .appendField("Turn to Direction=")
+          .appendField(new Blockly.FieldDropdown([["⬆ turn_180","0"],["➡ turn_270","1"], ["⬇ turn_390","2"], ["⬅ turn_90","3"],
+                                                  ["⬋ turn_45","4"],["⬉ turn_135","5"], ["⬈ turn_225","6"], ["⬊ turn_315","7"]]), "direction");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(65);
+ this.setTooltip("Gyro update");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['IMU_TurnByAngle'] = {
+  init: function() {
+    this.appendDummyInput()
+          .appendField("Turn By angle =")
+          .appendField(new Blockly.FieldDropdown([["90","0"],["-90","1"], ["180","2"], ["-180","3"], ["45","4"], ["-45","5"]]), "angle");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(65);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
 
+Blockly.Blocks['IMU_moveStraightPID'] = {
+  init: function() {
+    
+    this.appendDummyInput()
+          .appendField("Move ")
+          .appendField(new Blockly.FieldDropdown([["⬆ Forward","0"],["⬇ Backward","1"]]), "dir");
+    this.appendValueInput("S0")
+      .setCheck("Number")
+      .appendField("Straight At Angle=");
+    this.appendValueInput("S1")
+      .setCheck("Number")
+      .appendField("speed=");
+    this.appendValueInput("S2")
+      .setCheck("Number")
+      .appendField("time=");
+    this.appendValueInput("S3")
+      .setCheck("Number")
+      .appendField("KP=");
+    this.appendValueInput("S4")
+      .setCheck("Number")
+      .appendField("KI=");
+    this.appendValueInput("S5")
+      .setCheck("Number")
+      .appendField("KD=");
+    this.appendDummyInput()
+        .appendField("Slow before Stop")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "Slow");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(65);
+    this.setTooltip("");
+  }
+};
+Blockly.Blocks['IMU_set_dataFor_turnDirection'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Set Data for TurnDirection=");
+    this.appendValueInput("S4")
+      .setCheck("Number")
+      .appendField("Angle Error = ");
+    this.appendValueInput("S0")
+      .setCheck("Number")
+      .appendField("speed Min=");
+    this.appendValueInput("S1")
+      .setCheck("Number")
+      .appendField("Max=");
+    this.appendValueInput("S2")
+      .setCheck("Number")
+      .appendField("KP=");
+    this.appendValueInput("S3")
+      .setCheck("Number")
+      .appendField("KD=");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(65);
+    this.setTooltip("");
+  }
+};
+
+Blockly.Blocks['IMU_moveStraightDirection'] = {
+  init: function() {
+    
+    this.appendDummyInput()
+          .appendField("Move ")
+          .appendField(new Blockly.FieldDropdown([["⬆ Forward","0"],["⬇ Backward","1"]]), "dir");
+    this.appendDummyInput()
+          .appendField("At ")
+          .appendField(new Blockly.FieldDropdown([["⬆ North","0"],["➡ East","1"], ["⬇ South","2"], ["⬅ West","3"],
+                                                   ["⬋ SW","4"],["⬉ NW","5"], ["⬈ NE","6"], ["⬊ SE","7"]]), "angle");
+    this.appendValueInput("S1")
+      .setCheck("Number")
+      .appendField("speed=");
+    this.appendValueInput("S2")
+      .setCheck("Number")
+      .appendField("time=");
+    this.appendValueInput("S3")
+      .setCheck("Number")
+      .appendField("KP=");
+    this.appendValueInput("S4")
+      .setCheck("Number")
+      .appendField("KI=");
+    this.appendValueInput("S5")
+      .setCheck("Number")
+      .appendField("KD=");
+    this.appendDummyInput()
+        .appendField("Slow before Stop")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "Slow");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(65);
+    this.setTooltip("");
+  }
+};
 
 }
