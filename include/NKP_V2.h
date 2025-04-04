@@ -4,15 +4,22 @@
 #include <WiFiClient.h>
 #include <WiFiAP.h>
 #include <WebServer.h>
-#include <Wire.h>  
+
 #include <SPI.h>
-#include "SSD1306Wire.h"
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+
 #include "NKP_V2Motor_drive.h"
 #include "NKP_V2Servo_lib.h"
 #include "Adafruit_TCS34725.h"
 #include "NKP_V2Interrupt.h"
 #include <MPU6050_tockn.h>
-#include "dw_font.h"
+
+
+
+
 
 #define A1 39
 #define A2 36
@@ -31,8 +38,7 @@
 MPU6050 mpu6050(Wire);
 
 
-SSD1306Wire display(0x3c, 21, 22);
-
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
 Adafruit_TCS34725 tcs = Adafruit_TCS34725();
 
 
@@ -70,34 +76,39 @@ bool first_state_for_calribrate_B = 0;
 int state_IMU = 0;
 void draw_pixel(int16_t x, int16_t y)
 {
-  display.setColor(WHITE);
-  display.setPixel(x, y);
+  display.setTextColor(SSD1306_WHITE);
+  //display.setColor(WHITE);
+  display.setCursor(x, y);
 }
 
 void clear_pixel(int16_t x, int16_t y)
 {
-  display.setColor(BLACK);
-  display.setPixel(x, y);
+  //display.setColor(BLACK);
+  //display.setPixel(x, y);
+  display.setCursor(x, y);
 }
 void NKP_V2(){
   analogReadResolution(12);
-  
-  Serial.begin(115200);
   pinMode(13,INPUT);
-  display.init();
-  display.flipScreenVertically();
-  display.setFont(ArialMT_Plain_10);
-  if (tcs.begin()) {
-     Serial.println("Found sensor");
-  }
-  motor_control(14,0);
+  Wire.begin();
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.setTextSize(2);
   if(ADC(0) == 0 and ADC(1) == 0 and ADC(2) == 0 and ADC(4) == 0 and ADC(5) == 0 and ADC(6) == 0 and ADC(7) == 0){
     select_conection_i2c = 1;
     Wire1.begin(16,17);
   }
-  delay(200);
+  delay(2000);
 }
-
+void drawString(int x,int y,String Text){
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(x, y);
+  display.println(Text);
+}
+void drawString(int x,int y,int Text){
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(x, y);
+  display.println(String(Text));
+}
 
 int analog(int _pin){
     if(_pin == 1){return analogRead(36);}
@@ -124,11 +135,12 @@ int analog(int _pin){
 
 void set_IMU(){
   delay(500);
-  display.clear();
-  display.setFont(ArialMT_Plain_16);
-  display.drawString(15,0,"IMU_Calibrat");
-  display.drawString(25,17,"3 Second");
-  display.drawString(18,35,"Don't Move");
+  display.clearDisplay();
+  display.setTextSize(2);
+  //display.setFont(ArialMT_Plain_16);
+  drawString(15,0,"IMU_Calibrat");
+  drawString(25,17,"3 Second");
+  drawString(18,35,"Don't Move");
   display.display();
   mpu6050.begin();
   mpu6050.calcGyroOffsets(true);
@@ -140,13 +152,13 @@ void set_IMU(){
   	mpu6050.calcGyroOffsets(true);
   	mpu6050.update();
   }
-  display.clear();
-  display.drawString(0,0,"AngleX:");
-  display.drawString(70,0,String(1000 + mpu6050.getAngleX()));
-  display.drawString(0,17,"AngleY:");
-  display.drawString(70,17,String(1000 + mpu6050.getAngleY()));
-  display.drawString(0,35,"AngleZ:");
-  display.drawString(70,35,String(1000 + mpu6050.getAngleZ()));
+  display.clearDisplay();
+  drawString(0,0,"AngleX:");
+  drawString(70,0,String(1000 + mpu6050.getAngleX()));
+  drawString(0,17,"AngleY:");
+  drawString(70,17,String(1000 + mpu6050.getAngleY()));
+  drawString(0,35,"AngleZ:");
+  drawString(70,35,String(1000 + mpu6050.getAngleZ()));
   display.display();
   delay(700);
   state_IMU = 1;
@@ -201,64 +213,66 @@ void wait(){
   int state_sw0 = 0;
   pinMode(13,INPUT);
   pinMode(0,INPUT);
-  display.clear();
-  display.setFont(ArialMT_Plain_16);
-  display.drawString(25,0,"NKP_V2");
-  display.drawString(24,20,"Welcome");
+  display.clearDisplay();
+  display.setTextSize(2);
+  //display.setFont(ArialMT_Plain_16);
+  drawString(25,0,"NKP_V2");
+  drawString(24,20,"Welcome");
   display.display();
   delay(700);
-  display.setFont(ArialMT_Plain_10);
+  display.setTextSize(1);
+  //display.setFont(ArialMT_Plain_10);
   while(digitalRead(13) == 1){
     if(digitalRead(0) == 1){
-	  	display.clear();
-	  	display.drawString(0,0,String(String("A1::")));
-	  	display.drawString(28,0,String(analog(1)));
-	  	display.drawString(65,0,String(String("A2::")));
-	  	display.drawString(93,0,String(analog(2)));
-	  	display.drawString(0,12,String(String("A3::")));
-	  	display.drawString(28,12,String(analog(3)));
-	 	  display.drawString(65,12,String(String("A4::")));
-	  	display.drawString(93,12,String(analog(4)));
-	  	display.drawString(0,24,String(String("A5::")));
-	  	display.drawString(28,24,String(analog(5)));
-	  	display.drawString(65,24,String(String("A6::")));
-	  	display.drawString(93,24,String(analog(6)));
-      display.drawString(0,36,String(String("A7::")));
-      display.drawString(28,36,String(analog(7)));
-      display.drawString(65,36,String(String("A8::")));
-      display.drawString(93,36,String(analog(8)));
-      display.drawString(0,48,String(String("press boot to read A9-A17")));
+	  	display.clearDisplay();
+	  	drawString(0,0,String(String("A1::")));
+	  	drawString(28,0,String(analog(1)));
+	  	drawString(65,0,String(String("A2::")));
+	  	drawString(93,0,String(analog(2)));
+	  	drawString(0,12,String(String("A3::")));
+	  	drawString(28,12,String(analog(3)));
+	 	  drawString(65,12,String(String("A4::")));
+	  	drawString(93,12,String(analog(4)));
+	  	drawString(0,24,String(String("A5::")));
+	  	drawString(28,24,String(analog(5)));
+	  	drawString(65,24,String(String("A6::")));
+	  	drawString(93,24,String(analog(6)));
+      drawString(0,36,String(String("A7::")));
+      drawString(28,36,String(analog(7)));
+      drawString(65,36,String(String("A8::")));
+      drawString(93,36,String(analog(8)));
+      drawString(0,48,String(String("press boot to read A9-A17")));
 	  	display.display();
 	  	delay(100);
     }
     else{
-      display.clear();
-      display.drawString(0,0,String(String("A9::")));
-      display.drawString(28,0,String(analog(9)));
-      display.drawString(65,0,String(String("A10::")));
-      display.drawString(93,0,String(analog(10)));
-      display.drawString(0,12,String(String("A11::")));
-      display.drawString(28,12,String(analog(11)));
-      display.drawString(65,12,String(String("A12::")));
-      display.drawString(93,12,String(analog(12)));
-      display.drawString(0,24,String(String("A13::")));
-      display.drawString(28,24,String(analog(13)));
-      display.drawString(65,24,String(String("A14::")));
-      display.drawString(93,24,String(analog(14)));
-      display.drawString(0,36,String(String("A15::")));
-      display.drawString(28,36,String(analog(15)));
-      display.drawString(65,36,String(String("A16::")));
-      display.drawString(93,36,String(analog(16)));
-      display.drawString(0,48,String(String("A17::")));
-      display.drawString(28,48,String(analog(17)));
-      display.drawString(65,48,String(String("Volt=")));
-      display.drawString(95,48,String(Volt_input()));
+      display.clearDisplay();
+      drawString(0,0,String(String("A9::")));
+      drawString(28,0,String(analog(9)));
+      drawString(65,0,String(String("A10::")));
+      drawString(93,0,String(analog(10)));
+      drawString(0,12,String(String("A11::")));
+      drawString(28,12,String(analog(11)));
+      drawString(65,12,String(String("A12::")));
+      drawString(93,12,String(analog(12)));
+      drawString(0,24,String(String("A13::")));
+      drawString(28,24,String(analog(13)));
+      drawString(65,24,String(String("A14::")));
+      drawString(93,24,String(analog(14)));
+      drawString(0,36,String(String("A15::")));
+      drawString(28,36,String(analog(15)));
+      drawString(65,36,String(String("A16::")));
+      drawString(93,36,String(analog(16)));
+      drawString(0,48,String(String("A17::")));
+      drawString(28,48,String(analog(17)));
+      drawString(65,48,String(String("Volt=")));
+      drawString(95,48,String(Volt_input()));
       display.display();
       delay(100);
     }
   }
   beep();
-  display.clear();
+  display.clearDisplay();
   display.display();
   delay(500);
 }
@@ -297,10 +311,11 @@ void PID_set_Pin(int S0,int S1,int S2,int S3,int S4,int S5,int S6,int S7){
   PID_SetupPin[4] = S4;PID_SetupPin[5] = S5;PID_SetupPin[6] = S6;PID_SetupPin[7] = S7;
 }
 void setCalibrate(int round){
-  display.clear();
-  display.setFont(ArialMT_Plain_24);
-  display.drawString(0,0,"Front Sensor");
-  display.drawString(0,25,"  Calribrate  ");
+  display.clearDisplay();
+  display.setTextSize(3);
+  //display.setFont(ArialMT_Plain_24);
+  drawString(0,0,"Front Sensor");
+  drawString(0,25,"  Calribrate  ");
   display.display();
   if(first_state_for_calribrate == 0){
     for (uint8_t i = 0; i < PID_NumPin; i++)
@@ -327,7 +342,7 @@ void setCalibrate(int round){
     }
     delay(1);
   }
-  display.clear();
+  display.clearDisplay();
     
 }
 int ReadSensorMinValue(uint8_t _Pin){
@@ -508,10 +523,11 @@ bool Read_status_sensor_B(int pin_sensor){
 	return analog(PID_SetupPin_B[pin_sensor]) < ((PID_Max_B[pin_sensor] + PID_Min_B[pin_sensor]) / 2) ? true : false;
 }
 void setCalibrate_B(int round){
-  display.clear();
-  display.setFont(ArialMT_Plain_24);
-  display.drawString(0,0,"Black Sensor");
-  display.drawString(0,25,"  Calribrate  ");
+  display.clearDisplay();
+  display.setTextSize(3);
+  //display.setFont(ArialMT_Plain_24);
+  drawString(0,0,"Black Sensor");
+  drawString(0,25,"  Calribrate  ");
   display.display();
   if(first_state_for_calribrate_B == 0){
     for (uint8_t i = 0; i < PID_NumPin_B; i++)
@@ -538,7 +554,7 @@ void setCalibrate_B(int round){
     }
     delay(1);
   }
-  display.clear();
+  display.clearDisplay();
     
 }
 int Read_sumValue_sensor(){

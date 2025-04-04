@@ -13,6 +13,9 @@ Servo servo2;
 Servo servo3;
 Servo servo4;
 Servo servo5;
+
+
+int current_degree_servo = 90;
 void servo(uint8_t servo, int16_t angle)
 {
   if (servo == ALL)
@@ -126,4 +129,23 @@ void servo(uint8_t servo, int16_t angle)
     }
   }
 }
+
+void control_servo(int servo_ch,int servo_degree,int traget_degree,int servo_speed){
+    if(servo_degree < traget_degree ){
+      for(int i = servo_degree;i<traget_degree;i++){
+        servo(servo_ch,i);
+        delay(servo_speed);
+        current_degree_servo = i;
+      }
+    }
+    else {
+      for(int i = servo_degree;i>traget_degree;i--){
+        servo(servo_ch,i);
+        delay(servo_speed);
+        current_degree_servo = i;
+      }
+    }
+}
+
+
 //Cr. Inex
