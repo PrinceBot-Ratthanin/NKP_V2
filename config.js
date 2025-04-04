@@ -8,5 +8,5 @@ module.exports = {
     email : 'print081@gmail.com',
     git : 'https://github.com/PrinceBot-Ratthanin/NKP_ONE-KB-IDE/',    
     image : '/static/NKP_V2.jpg',
-    version : '1.0'
+    version : '2.0'
 };
